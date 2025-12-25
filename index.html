@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Dreamy Christmas Miracle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Montserrat:wght@300;400;600&family=Dancing+Script:wght@700&family=Great+Vibes&display=swap');
+
+        :root {
+            --sky-blue: #87ceeb;
+            --cloud-blue: #e0f2fe;
+            --royal-purple: #7c3aed;
+            --soft-purple: #c084fc;
+            --deep-purple: #2e1065;
+            --pure-white: #ffffff;
+            --bg-dream: linear-gradient(135deg, #2e1065 0%, #1e1b4b 50%, #581c87 100%);
+            --aurora-glow: rgba(124, 58, 237, 0.4);
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-dream: linear-gradient(135deg, #f5f3ff 0%, #e0f2fe 50%, #fae8ff 100%);
+                --aurora-glow: rgba(192, 132, 252, 0.5);
+            }
+        }
+
+        body {
+            background: var(--bg-dream);
+            color: var(--pure-white);
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 1rem;
+            position: relative;
+        }
+
+        /* Animations */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(192, 132, 252, 0.4); border-color: var(--soft-purple); }
+            50% { box-shadow: 0 0 40px rgba(124, 58, 237, 0.7); border-color: var(--pure-white); }
+        }
+
+        .animate-page {
+            animation: fadeInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .aurora-layer {
+            position: fixed;
+            inset: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, var(--aurora-glow) 0%, transparent 65%);
+            z-index: -1;
+            animation: drift 25s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes drift {
+            from { transform: translate(-5%, -5%) rotate(0deg); }
+            to { transform: translate(5%, 5%) rotate(12deg); }
+        }
+
+        #canvas-stars {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .fancy-title {
+            font-family: 'Cinzel Decorative', cursive;
+            background: linear-gradient(to bottom, var(--pure-white) 10%, var(--soft-purple) 50%, var(--sky-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.5));
+        }
+
+        .glass-portal {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 3rem;
+            padding: 4rem 2rem;
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.3);
+            margin: auto;
+        }
+
+        #no-button {
+            position: absolute;
+            transition: transform 0.2s ease-out;
+            will-change: transform;
+            z-index: 50;
+            touch-action: none;
+        }
+
+        .btn-love {
+            background: linear-gradient(135deg, var(--royal-purple), var(--sky-blue));
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-love:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 45px rgba(124, 58, 237, 0.6);
+        }
+
+        .love-text {
+            background: linear-gradient(to right, #bae6fd, #f472b6, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .page-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-dream);
+            z-index: 1000;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .overlay-content {
+            width: 100%;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .handwritten {
+            font-family: 'Great Vibes', cursive;
+            color: var(--soft-purple);
+        }
+
+        .declaration-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 2.5rem;
+            padding: 3rem 2rem;
+            max-width: 600px;
+            backdrop-filter: blur(15px);
+            line-height: 1.8;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Duo Photo Frame Style */
+        .duo-frame-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .photo-frame {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid var(--soft-purple);
+            overflow: hidden;
+            animation: glowPulse 4s infinite ease-in-out;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .photo-frame.your-frame {
+            margin-left: -40px; /* Overlap effect */
+            z-index: 1;
+            animation-delay: 2s;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            font-size: 4rem;
+            color: var(--soft-purple);
+            opacity: 0.5;
+        }
+
+        .union-heart {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            font-size: 2rem;
+            filter: drop-shadow(0 0 10px var(--royal-purple));
+            animation: heartBeat 1.5s infinite;
+        }
+
+        /* Confirmation Modal */
+        #confirmation-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-box {
+            background: var(--deep-purple);
+            border: 1px solid var(--soft-purple);
+            padding: 2.5rem;
+            border-radius: 2rem;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            animation: fadeInScale 0.4s ease-out;
+        }
+
+        @media (max-width: 640px) {
+            .fancy-title { font-size: 2.5rem; }
+            .btn-love { width: 100%; padding: 1rem; }
+            .overlay-content h2 { font-size: 3.5rem; }
+            .photo-frame { width: 140px; height: 140px; }
+            .photo-frame.your-frame { margin-left: -30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-layer"></div>
+    <div class="aurora-layer" style="animation-delay: -12s; opacity: 0.5;"></div>
+    <canvas id="canvas-stars"></canvas>
+
+    <!-- Page 1 -->
+    <div id="page-1" class="glass-portal animate-page">
+        <div class="mb-6 relative inline-block">
+            <span class="text-8xl block transform hover:rotate-12 transition-transform duration-500">❄️</span>
+            <div class="absolute inset-0 bg-purple-500/30 blur-3xl rounded-full"></div>
+        </div>
+        <h1 class="fancy-title text-5xl md:text-7xl mb-6 tracking-widest font-black">Merry Christmas</h1>
+        <p class="text-xl md:text-2xl font-light mb-10 leading-relaxed px-4 opacity-90">
+            In the quiet magic of this season, <br/>
+            there is one truth I want you to know...
+            <br/><br/>
+            Will you make this Christmas <br/> 
+            <span class="italic font-bold text-white underline decoration-purple-400 underline-offset-8">the beginning of our forever?</span>
+        </p>
+        <div class="relative flex flex-col md:flex-row justify-center items-center gap-10 min-h-[120px]">
+            <button onclick="showPage('disclaimer-overlay')" class="btn-love px-16 py-5 rounded-full text-2xl font-black z-20">
+                YES! 
+            </button>
+            <button id="no-button" class="px-8 py-3 rounded-full text-white/60 font-bold border border-white/10 bg-white/5">
+                No
+            </button>
+        </div>
+    </div>
+
+    <!-- Page 2 -->
+    <div id="disclaimer-overlay" class="page-overlay">
+        <div class="overlay-content animate-page">
+            <div class="text-8xl mb-8" style="animation: heartBeat 2s infinite">💜</div>
+            <h2 class="fancy-title text-5xl md:text-7xl mb-6">Promise</h2>
+            <div class="declaration-card mb-12 border-dashed border-2 border-purple-400/40">
+                <p class="text-3xl md:text-4xl handwritten mb-6">"Wait, my ..."</p>
+                <p class="text-xl md:text-2xl font-light text-white/90 italic">
+                    By proceeding, you are telling me that your heart is ready to journey with mine. It is a promise of love, respect, and a future we build together under God’s grace.
+                </p>
+            </div>
+            <button onclick="startConfirmation()" class="btn-love px-14 py-6 rounded-full text-xl font-bold uppercase tracking-widest">
+                I Truly Love You, Proceed ✨
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal">
+        <div class="modal-box">
+            <h3 id="modal-text" class="text-2xl font-bold mb-8 text-sky-200">Are you absolutely sure?</h3>
+            <div class="flex flex-col gap-4">
+                <button id="modal-confirm" class="btn-love py-3 rounded-full font-bold">Yes, I am sure ❤️</button>
+                <button onclick="closeModal()" class="text-white/40 text-sm hover:text-white transition-colors">Wait, let me think...</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 3: The Personal Declaration -->
+    <div id="final-overlay" class="page-overlay">
+        <div class="overlay-content animate-page">
+            
+            <!-- DUO PHOTO FRAME -->
+            <div class="duo-frame-container">
+                <div class="photo-frame" id="mercy-photo-frame">
+                    <div class="photo-placeholder">💜</div>
+                </div>
+                <div class="photo-frame your-frame" id="your-photo-frame">
+                    <div class="photo-placeholder">👤</div>
+                </div>
+                <div class="union-heart">💖</div>
+            </div>
+
+            <h2 class="fancy-title text-4xl md:text-7xl mb-10">Our Divine Path</h2>
+            
+            <div class="declaration-card relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-8xl">✨</div>
+                <p class="text-2xl md:text-3xl font-light leading-relaxed text-white">
+                    <span class="handwritten text-4xl block mb-4 text-sky-300">Mercy Unekwu Ojo Edibo,</span>
+                    On this beautiful day, I solemnly declare my love and deepest feelings to you. This is not to damnation, but with a <span class="love-text">pure and holy intent</span>. 
+                    <br/><br/>
+                    According to our beliefs, morals, values, and the <span class="text-purple-300 font-bold">Will of God</span>, I promise to cherish you. I am willing to wait with patience until you are ready, for true love knows no rush.
+                    <br/><br/>
+                    My dream is to one day have the honor of <span class="text-sky-300 font-bold underline decoration-sky-300/30">walking you down the aisle</span>, to start a life where God is our foundation and love is our language.
+                </p>
+            </div>
+
+            <p class="mt-12 text-3xl handwritten text-purple-200">Yours Always, Forever.</p>
+            
+            <button onclick="location.reload()" class="mt-16 px-8 py-3 border border-white/10 rounded-full text-xs uppercase tracking-widest opacity-40 hover:opacity-100 transition-all">
+                Relive the Moment
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- PHOTO SETUP ---
+        // PASTE YOUR LINKS BETWEEN THE QUOTES BELOW
+        const mercyPhotoUrl = "/home/jew/Documents/mrs powers/Screenshot_2025-12-25-05-02-09-067_com.miui.gallery.jpg"; 
+        const yourPhotoUrl = "/home/jew/Documents/mrs powers/wify1.jpg";
+
+        if (mercyPhotoUrl) {
+            document.getElementById('mercy-photo-frame').innerHTML = `<img src="${mercyPhotoUrl}" alt="Mercy" onerror="this.style.display='none'">`;
+        }
+        if (yourPhotoUrl) {
+            document.getElementById('your-photo-frame').innerHTML = `<img src="${yourPhotoUrl}" alt="You" onerror="this.style.display='none'">`;
+        }
+
+        const canvas = document.getElementById('canvas-stars');
+        const ctx = canvas.getContext('2d');
+        const noBtn = document.getElementById('no-button');
+        const modal = document.getElementById('confirmation-modal');
+        const modalText = document.getElementById('modal-text');
+        const modalConfirm = document.getElementById('modal-confirm');
+
+        let confirmationStep = 0;
+
+        function showPage(id) {
+            document.getElementById('page-1').style.display = 'none';
+            document.querySelectorAll('.page-overlay').forEach(el => el.style.display = 'none');
+            const target = document.getElementById(id);
+            target.style.display = 'block';
+            target.scrollTop = 0;
+            if (id === 'final-overlay') spawnHearts(target);
+        }
+
+        function startConfirmation() {
+            confirmationStep = 1;
+            modalText.innerText = "Are you absolutely sure? ❤️";
+            modal.style.display = 'flex';
+        }
+
+        modalConfirm.onclick = () => {
+            if (confirmationStep === 1) {
+                confirmationStep = 2;
+                modalText.innerText = "With all your heart and soul? ✨";
+                modalConfirm.innerText = "Yes, with everything! 💜";
+            } else {
+                closeModal();
+                showPage('final-overlay');
+            }
+        };
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        let stars = [];
+        const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.opacity = Math.random();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+            }
+        }
+        for(let i=0; i<200; i++) stars.push(new Star());
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => s.draw());
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        let curX = 0, curY = 0, tarX = 0, tarY = 0;
+        const updatePos = () => {
+            curX += (tarX - curX) * 0.15;
+            curY += (tarY - curY) * 0.15;
+            noBtn.style.transform = `translate(${curX}px, ${curY}px)`;
+            requestAnimationFrame(updatePos);
+        };
+        updatePos();
+
+        const moveNo = (ex, ey) => {
+            const rect = noBtn.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            if (Math.hypot(ex - centerX, ey - centerY) < 100) {
+                const angle = Math.atan2(centerY - ey, centerX - ex);
+                tarX += Math.cos(angle) * 180;
+                tarY += Math.sin(angle) * 180;
+                const maxX = window.innerWidth * 0.4;
+                const maxY = window.innerHeight * 0.4;
+                tarX = Math.max(-maxX, Math.min(maxX, tarX));
+                tarY = Math.max(-maxY, Math.min(maxY, tarY));
+            }
+        };
+
+        document.addEventListener('mousemove', (e) => moveNo(e.clientX, e.clientY));
+        document.addEventListener('touchstart', (e) => moveNo(e.touches[0].clientX, e.touches[0].clientY), {passive: true});
+
+        function spawnHearts(parent) {
+            const symbols = ['💜', '✨', '💍', '🕊️', '☁️', '❤️'];
+            for(let i=0; i<80; i++) {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.className = 'floating-heart text-4xl';
+                    el.innerHTML = symbols[Math.floor(Math.random()*symbols.length)];
+                    el.style.left = Math.random() * 100 + 'vw';
+                    el.style.setProperty('--d', (Math.random() * 4 + 3) + 's');
+                    parent.appendChild(el);
+                    setTimeout(() => el.remove(), 7000);
+                }, i * 60);
+            }
+        }
+        noBtn.style.position = 'relative';
+    </script>
+</body>
+</html>
